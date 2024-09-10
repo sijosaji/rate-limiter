@@ -14,7 +14,7 @@ This is a Spring Boot application that implements a simple rate limiting mechani
 To build and run this application, you need the following installed on your system:
 
 - Java 21
-- Maven 3.6+ or Gradle 7+
+- Maven 3.6+
 - MongoDB (locally or remotely)
 - An IDE (e.g., IntelliJ IDEA, Eclipse, VS Code)
 
@@ -53,10 +53,10 @@ You can run the application in two ways:
 
 2. **Using the Executable JAR**:
     ```bash
-    java -jar target/your-application-name.jar
+    java -jar target/ratelimiter-0.0.1-SNAPSHOT.jar
     ```
 
-The application will start on `http://localhost:8080`.
+The application will start on `http://localhost:9001`.
 
 ## API Endpoints
 
@@ -73,4 +73,4 @@ Check the rate limit for a specific user ID.
 
 Example Request:
 ```bash
-curl -X GET "http://localhost:8080/api/rate-limit?userId=someUserId"
+curl -X GET "http://localhost:9001/api/rate-limit?userId=someUserId"
