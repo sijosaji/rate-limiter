@@ -22,8 +22,8 @@ To build and run this application, you need the following installed on your syst
 
 1. **Clone the Repository**:
     ```bash
-    git clone https://github.com/yourusername/your-repository-name.git
-    cd your-repository-name
+    git clone https://github.com/sijosaji/ratelimiter.git
+    cd ratelimiter
     ```
 
 2. **Build the Project**:
@@ -35,7 +35,7 @@ To build and run this application, you need the following installed on your syst
 
  **MongoDB Setup**:
    - Ensure MongoDB is running.
-   - Update the `application.properties` or `application.yml` file located in the `src/main/resources` directory with your MongoDB connection details:
+   - Update the `application.properties` file located in the `src/main/resources` directory with your MongoDB connection details:
 
      ```properties
      spring.data.mongodb.uri=mongodb://localhost:27017/mongo_migration
@@ -60,12 +60,12 @@ The application will start on `http://localhost:9001`.
 
 ## API Endpoints
 
-### `GET /api/rate-limit`
+### `PUT /api/rate-limit/{userId}`
 
 Check the rate limit for a specific user ID.
 
 - **Request**:
-  - Query Parameters: `userId` (String) - The user ID to check the rate limit for.
+  - Path Parameter: `userId` (String) - The user ID to check the rate limit for.
   
 - **Response**:
   - `200 OK`: If the request is allowed.
@@ -73,4 +73,4 @@ Check the rate limit for a specific user ID.
 
 Example Request:
 ```bash
-curl -X GET "http://localhost:9001/api/rate-limit?userId=someUserId"
+curl -X PUT "http://localhost:9001/api/rate-limit/12345"
