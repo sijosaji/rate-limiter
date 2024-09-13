@@ -45,7 +45,7 @@ public class RateLimiterController {
      * @return a {@code ResponseEntity} containing the status and message of the rate limit check
      */
     @PutMapping(USER_ID_PATH)
-    public ResponseEntity<?> checkRateLimit(@PathVariable("userId") String userId) {
+    public ResponseEntity<ApiResponse> checkRateLimit(@PathVariable("userId") String userId) {
         RateLimiterResponse response = rateLimiterService.checkRateLimit(userId);
 
         if (response.isAllowed()) {
