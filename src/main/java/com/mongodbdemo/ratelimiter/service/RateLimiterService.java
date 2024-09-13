@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
+/**
+ * Service class for managing rate limiting functionality.
+ * Provides methods to check and enforce rate limits based on user ID.
+ */
 @Service
 public class RateLimiterService {
 
@@ -24,13 +28,27 @@ public class RateLimiterService {
     @Value("${rate.limiter.expiration.minutes}")
     private int expirationMinutes;
 
+    /**
+     * Constructs a {@code RateLimiterService} with the given {@code MongoTemplate}.
+     *
+     * @param mongoTemplate the MongoDB template used to interact with the database
+     */
     public RateLimiterService(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
+    /**
+     * Checks the rate limit for a given user ID and returns a response indicating whether the rate limit is exceeded.
+     * If the rate limit is exceeded, it returns a {@code RateLimiterResponse} with the expiration time of the rate limit.
+     * Otherwise, it allows the request and increments the rate limit counter.
+     *
+     * @param userId the ID of the user for whom the rate limit is being checked
+     * @return a {@code RateLimiterResponse} indicating whether the request is allowed or rate limit is exceeded,
+     *         and the expiration time if the limit is exceeded
+     */
     public RateLimiterResponse checkRateLimit(String userId) {
         Instant now = Instant.now();
-        // Need to deduct 1 minute to factor in time taken for mongodb job to delete expired documents.
+        // Deduct 1 minute to account for MongoDB job delay in deleting expired documents
         Instant expirationTime = now.plusSeconds(expirationMinutes * 60L - 60L);
 
         Query query = new Query(Criteria.where("userId").is(userId));
@@ -42,7 +60,7 @@ public class RateLimiterService {
                 .setOnInsert("expirationTime", expirationTime);
         RateLimiter rateLimiter = null;
         try {
-             mongoTemplate.findAndModify(
+            mongoTemplate.findAndModify(
                     query.addCriteria(Criteria.where("counter").lt(threshold)),
                     update,
                     new FindAndModifyOptions().returnNew(true).upsert(true),
@@ -55,13 +73,7 @@ public class RateLimiterService {
                 return new RateLimiterResponse(false, rateLimiter.getExpirationTime());
             }
             return new RateLimiterResponse(true, null);
-
         }
         return new RateLimiterResponse(true, null);
-
     }
-
-
 }
-
-
