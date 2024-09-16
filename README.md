@@ -69,7 +69,7 @@ Check the rate limit for a specific user ID.
   
 - **Response**:
   - `200 OK`: If the request is allowed.
-  - `429 TOO MANY REQUESTS`: If the request exceeds the rate limit, with a `retry-after` header indicating when the user can retry.
+  - `429 TOO MANY REQUESTS`: If the request exceeds the rate limit, with a `retry-after` header indicating time in **seconds** when the user can retry.
 
 Example Request:
 ```bash
